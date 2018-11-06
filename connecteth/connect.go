@@ -16,8 +16,8 @@ import(
 
 type Client struct {
 
-    rpcClient *rpc.Client
-    ethClient *ethclient.Client
+    RpcClient *rpc.Client
+    EthClient *ethclient.Client
 }
 
 func Connect(host string) (*Client, error) {
@@ -37,7 +37,7 @@ func Connect(host string) (*Client, error) {
 func (ec *Client) GetBlockNumber(ctx context.Context) (*big.Int, error) {
 
     var result hexutil.Big
-    err := ec.rpcClient.CallContext(ctx, &result, "eth_blockNumber")
+    err := ec.RpcClient.CallContext(ctx, &result, "eth_blockNumber")
     return (*big.Int)(&result), err
 }
 
@@ -71,7 +71,7 @@ func NewMessage(from *common.Address, to *common.Address, value *big.Int, gasLim
 
 func (ec *Client) SendTransaction(ctx context.Context, tx *Message) (common.Hash, error) {
     var txHash common.Hash
-    err := ec.rpcClient.CallContext(ctx, &txHash, "eth_sendTransaction")
+    err := ec.RpcClient.CallContext(ctx, &txHash, "eth_sendTransaction")
     return txHash, err
 }
 
@@ -80,7 +80,7 @@ func (ec *Client) CheckTransaction(ctx context.Context, receiptChan chan *types.
     go func() {
         fmt.Printf("Check transaction: %s\n", txHash.String())
         for {
-            receipt, _ := ec.ethClient.TransactionReipt(ctx, txHash)
+            receipt, _ := ec.EthClient.TransactionReceipt(ctx, txHash)
             if receipt != nil {
                 receiptChan <- receipt
                 break
