@@ -3,7 +3,7 @@ package connecteth
 import(
     "fmt"
     "context"
-	"encoding/json"
+    "encoding/json"
     "math/big"
     "time"
 
@@ -71,7 +71,7 @@ func NewMessage(from *common.Address, to *common.Address, value *big.Int, gasLim
 
 func (ec *Client) SendTransaction(ctx context.Context, tx *Message) (common.Hash, error) {
     var txHash common.Hash
-    err := ec.RpcClient.CallContext(ctx, &txHash, "eth_sendTransaction")
+    err := ec.RpcClient.CallContext(ctx, &txHash, "eth_sendTransaction", tx)
     return txHash, err
 }
 
